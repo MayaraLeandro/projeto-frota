@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Gestor - Checklists</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: auto; }
+        h2 { color: #333; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #007bff; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        button { background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Painel do Gestor - Monitoramento de Frota</h2>
+    <button onclick="carregarChecklists()">Atualizar Dados</button>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Data/Hora</th>
+                <th>Placa</th>
+                <th>Motorista</th>
+                <th>Tipo</th>
+                <th>Observações / Reparos</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaChecklists">
+            <!-- Dados carregados via JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function carregarChecklists() {
+        try {
+            const resposta = await fetch('http://localhost:3000/api/checklists');
+            const dados = await resposta.json();
+            
+            const tbody = document.getElementById('tabelaChecklists');
+            tbody.innerHTML = '';
+
+            if (dados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum checklist enviado ainda.</td></tr>';
+                return;
+            }
+
+            dados.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.dataHora}</td>
+                    <td><b>${item.placa}</b></td>
+                    <td>${item.motorista}</td>
+                    <td>${item.tipo}</td>
+                    <td>${item.observacoes || 'Nenhuma observação'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (erro) {
+            alert('Erro ao buscar dados do servidor.');
+        }
+    }
+
+    carregarChecklists();
+</script>
+
+</body>
+</html>

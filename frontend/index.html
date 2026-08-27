@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Frota - Motorista</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 500px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: auto; }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; background: #28a745; color: white; border: none; padding: 12px; margin-top: 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Checklist de Frota</h2>
+    <form id="checklistForm">
+        <label for="placa">Placa do Veículo (Caminhão/Carreta):</label>
+        <input type="text" id="placa" required placeholder="Ex: ABC-1234">
+
+        <label for="motorista">Nome do Motorista:</label>
+        <input type="text" id="motorista" required placeholder="Seu nome completo">
+
+        <label for="tipo">Tipo de Checklist:</label>
+        <select id="tipo" required>
+            <option value="">Selecione...</option>
+            <option value="Pré-saída (Segurança)">Pré-saída (Segurança)</option>
+            <option value="Parada no Posto (Óleo, Pneu, etc.)">Parada no Posto (Óleo, Pneu, etc.)</option>
+        </select>
+
+        <label for="observacoes">Observações / Problemas Encontrados:</label>
+        <textarea id="observacoes" rows="4" placeholder="Descreva se há reparos necessários, nível de óleo, calibragem..."></textarea>
+
+        <button type="submit">Enviar Checklist</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('checklistForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const dados = {
+            placa: document.getElementById('placa').value,
+            motorista: document.getElementById('motorista').value,
+            tipo: document.getElementById('tipo').value,
+            observacoes: document.getElementById('observacoes').value
+        };
+
+        try {
+            const resposta = await fetch('http://localhost:3000/api/checklist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            const resultado = await resposta.json();
+            alert(resultado.mensagem);
+            this.reset();
+        } catch (erro) {
+            alert('Erro ao conectar com o servidor!');
+            console.log(erro);
+        }
+    });
+</script>
+
+</body>
+</html>
