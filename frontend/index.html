@@ -3,66 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist de Frota - Motorista</title>
+    <title>Checklist de Saída - Frota</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
-        .container { max-width: 500px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: auto; }
-        h2 { text-align: center; color: #333; }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; background: #28a745; color: white; border: none; padding: 12px; margin-top: 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #218838; }
+        :root {
+            --primary: #007bff;
+            --success: #28a745;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #ced4da;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin: auto;
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            background-color: #fff;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        fieldset {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-color: #fafbfc;
+        }
+
+        legend {
+            font-weight: bold;
+            color: var(--primary);
+            padding: 0 10px;
+            font-size: 16px;
+        }
+
+        .checklist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .options-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .options-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #bloco-manutencao {
+            display: none;
+            margin-top: 15px;
+        }
+
+        button.btn-submit {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.btn-submit:hover {
+            background: #218838;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Checklist de Frota</h2>
-    <form id="checklistForm">
-        <label for="placa">Placa do Veículo (Caminhão/Carreta):</label>
-        <input type="text" id="placa" required placeholder="Ex: ABC-1234">
+    <h2>Checklist de Saída de Veículo</h2>
+    
+    <form id="formChecklist">
+        <div class="form-group">
+            <label for="placa">Placa do Veículo:</label>
+            <input type="text" id="placa" required placeholder="Ex: ABC-1234" style="text-transform: uppercase;">
+        </div>
 
-        <label for="motorista">Nome do Motorista:</label>
-        <input type="text" id="motorista" required placeholder="Seu nome completo">
+        <div class="form-group">
+            <label for="motorista">Nome do Motorista:</label>
+            <input type="text" id="motorista" required placeholder="Seu nome completo">
+        </div>
 
-        <label for="tipo">Tipo de Checklist:</label>
-        <select id="tipo" required>
-            <option value="">Selecione...</option>
-            <option value="Pré-saída (Segurança)">Pré-saída (Segurança)</option>
-            <option value="Parada no Posto (Óleo, Pneu, etc.)">Parada no Posto (Óleo, Pneu, etc.)</option>
-        </select>
+        <fieldset>
+            <legend>Inspeção de Itens (Saída)</legend>
+            
+            <div class="checklist-item">
+                <span>Pneus</span>
+                <div class="options-group">
+                    <label><input type="radio" name="pneu" value="OK" checked> OK</label>
+                    <label><input type="radio" name="pneu" value="Pendente"> Pendente</label>
+                </div>
+            </div>
 
-        <label for="observacoes">Observações / Problemas Encontrados:</label>
-        <textarea id="observacoes" rows="4" placeholder="Descreva se há reparos necessários, nível de óleo, calibragem..."></textarea>
+            <div class="checklist-item">
+                <span>Óleo do Motor</span>
+                <div class="options-group">
+                    <label><input type="radio" name="oleo" value="OK" checked> OK</label>
+                    <label><input type="radio" name="oleo" value="Pendente"> Pendente</label>
+                </div>
+            </div>
 
-        <button type="submit">Enviar Checklist</button>
+            <div class="checklist-item">
+                <span>Infiltração do Baú</span>
+                <div class="options-group">
+                    <label><input type="radio" name="infiltracaoBau" value="OK" checked> OK</label>
+                    <label><input type="radio" name="infiltracaoBau" value="Pendente"> Pendente</label>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <span>Para-brisa</span>
+                <div class="options-group">
+                    <label><input type="radio" name="parabrisa" value="OK" checked> OK</label>
+                    <label><input type="radio" name="parabrisa" value="Pendente"> Pendente</label>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <span>Troca de Óleo</span>
+                <div class="options-group">
+                    <label><input type="radio" name="trocaOleo" value="OK" checked> OK</label>
+                    <label><input type="radio" name="trocaOleo" value="Pendente"> Pendente</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="form-group">
+            <label for="temManutencao">Há alguma manutenção a fazer?</label>
+            <select id="temManutencao" onchange="verificarManutencao()">
+                <option value="nao">Não</option>
+                <option value="sim">Sim</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="bloco-manutencao">
+            <label for="observacoes">Descreva qual manutenção é necessária:</label>
+            <textarea id="observacoes" rows="3" placeholder="Detalhe o problema encontrado..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Enviar Checklist</button>
     </form>
 </div>
 
 <script>
-    document.getElementById('checklistForm').addEventListener('submit', async function(e) {
+    function verificarManutencao() {
+        const opcao = document.getElementById('temManutencao').value;
+        const bloco = document.getElementById('bloco-manutencao');
+        if (opcao === 'sim') {
+            bloco.style.display = 'block';
+        } else {
+            bloco.style.display = 'none';
+            document.getElementById('observacoes').value = '';
+        }
+    }
+
+    document.getElementById('formChecklist').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const dados = {
-            placa: document.getElementById('placa').value,
+        const dadosChecklist = {
+            placa: document.getElementById('placa').value.toUpperCase(),
             motorista: document.getElementById('motorista').value,
-            tipo: document.getElementById('tipo').value,
-            observacoes: document.getElementById('observacoes').value
+            tipo: 'Saída',
+            pneu: document.querySelector('input[name="pneu"]:checked').value,
+            oleo: document.querySelector('input[name="oleo"]:checked').value,
+            infiltracaoBau: document.querySelector('input[name="infiltracaoBau"]:checked').value,
+            parabrisa: document.querySelector('input[name="parabrisa"]:checked').value,
+            trocaOleo: document.querySelector('input[name="trocaOleo"]:checked').value,
+            observacoes: document.getElementById('observacoes').value || 'Nenhuma observação'
         };
 
         try {
-            const resposta = await fetch('http://localhost:3000/api/checklist', {
+            const resposta = await fetch('https://projeto-frota.onrender.com/api/checklists', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
+                body: JSON.stringify(dadosChecklist)
             });
 
-            const resultado = await resposta.json();
-            alert(resultado.mensagem);
-            this.reset();
+            if (resposta.ok) {
+                alert('Checklist enviado com sucesso!');
+                document.getElementById('formChecklist').reset();
+                verificarManutencao();
+            } else {
+                alert('Erro ao enviar o checklist. Tente novamente.');
+            }
         } catch (erro) {
-            alert('Erro ao conectar com o servidor!');
-            console.log(erro);
+            alert('Erro de conexão com o servidor.');
         }
     });
 </script>
