@@ -41,7 +41,7 @@
 <script>
     async function carregarChecklists() {
         try {
-            const resposta = await fetch('http://localhost:3000/api/checklists');
+            const resposta = await fetch('https://projeto-frota.onrender.com/api/checklists');
             const dados = await resposta.json();
             
             const tbody = document.getElementById('tabelaChecklists');
